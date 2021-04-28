@@ -10,6 +10,8 @@ public class UIManager : MonoBehaviour
 
     public TextMeshProUGUI debugText;
 
+    private TextMeshProUGUI[] debugTexts;
+
     public int test = 0;
     
     // Start is called before the first frame update
@@ -22,22 +24,29 @@ public class UIManager : MonoBehaviour
         }
 
         current = this;
-        Debug.Log("this is set");
         DontDestroyOnLoad(gameObject);
+
+        current.debugTexts = current.GetComponentsInChildren<TextMeshProUGUI>();
+        foreach(var comp in current.debugTexts)
+        {
+            comp.text = "";
+        }
     }
 
-    public static void UpdateDebugText(string text)
+
+    public static void UpdateDebugText(string text, int nr)
     {
         if (current == null)
         {
             return;
         }
 
-        if (current.debugText == null)
+        if (nr > current.debugTexts.Length)
         {
             Debug.Log("debug text is null");
             return;
         }
-        current.debugText.text = text;
+
+        current.debugTexts[nr].text = text;
     }
 }

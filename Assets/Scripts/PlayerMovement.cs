@@ -43,6 +43,7 @@ public class PlayerMovement : MonoBehaviour
 	private Rigidbody2D rb;
 	private SpriteRenderer sr;
 	private CapsuleCollider2D cc;
+	private Animator animator;
 
 	// Start is called before the first frame update
 	void Start()
@@ -50,6 +51,7 @@ public class PlayerMovement : MonoBehaviour
         rb = gameObject.GetComponent<Rigidbody2D>();
         sr = gameObject.GetComponent<SpriteRenderer>();
 		cc = gameObject.GetComponent<CapsuleCollider2D>();
+		animator = gameObject.GetComponent<Animator>();
 
 		colliderSize = cc.size;
 		colliderOffset = cc.offset;
@@ -61,16 +63,21 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
 		//Debug print
-		UIManager.UpdateDebugText(isOnSlope.ToString());
+		UIManager.UpdateDebugText($"grounded: {isGrounded.ToString()}", 0);
+		UIManager.UpdateDebugText($"canWalkOnSlope: {canWalkOnSlope.ToString()}", 1);
+		UIManager.UpdateDebugText($"is jumping: {isJumping.ToString()}", 2);
 
 		moveX = Input.GetAxisRaw("Horizontal");
+
+		animator.SetFloat("Speed", Mathf.Abs(moveX));
 
 		if (Input.GetButtonDown("Jump"))
 		{
 			Jump(playerJumpPower);
 		}
 
-
+		animator.SetBool("IsJumping", isJumping);
+		animator.SetBool("IsGrounded", isGrounded);
 	}
 
     void FixedUpdate()
@@ -103,7 +110,7 @@ public class PlayerMovement : MonoBehaviour
 		else if (isGrounded && isOnSlope && !isJumping && canWalkOnSlope)
 		{
 			
-			if ( moveX == slopeDirection)//slopeNormalPerp == Vector2.left &&
+			if ( moveX == slopeDirection && slopeNormalPerp == Vector2.left ) 
 			{
 				velocity.Set(-moveX * playerSpeed * slopeSideNormalPerp.x * Time.fixedDeltaTime, -moveX * playerSpeed * slopeSideNormalPerp.y * Time.fixedDeltaTime);
 			}
@@ -121,12 +128,17 @@ public class PlayerMovement : MonoBehaviour
 			rb.velocity = velocity;
 			Debug.Log("Applying jumping speed");
 		}
+		else
+        {
+			Debug.Log("Can't apply normal movement");
+        }
+
+		animator.SetFloat("VelocityY", rb.velocity.y);
 		
 	}
 
 	private void CheckGround()
 	{
-		// TODO: check ground from capsule collider (same as check slope)
 		isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 		
 
@@ -134,11 +146,19 @@ public class PlayerMovement : MonoBehaviour
 		{
 			isJumping = false;
 		}
-		// TODO: jump sometimes still works on too steep slopes
-		if (isGrounded && !isJumping && canWalkOnSlope)
+
+		if (isGrounded && !isJumping)
 		{
 			canJump = true;
 		}
+
+		// falling mechanics
+		if (!isGrounded)
+        {
+			rb.sharedMaterial = noFriction;
+		}
+		
+
 
 	}
 
@@ -149,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
 		CheckSlopeHorizontal(checkPos);
 		CheckSlopeVertical(checkPos);
 
-		if (slopeSideAngle == 0 && slopeDownAngle == 0)
+		if ((slopeSideAngle == 0 || slopeSideAngle > maxSlopeAngle) && slopeDownAngle == 0)
         {
 			isOnSlope = false;
         }
@@ -212,7 +232,7 @@ public class PlayerMovement : MonoBehaviour
 			canWalkOnSlope = true;
         }
 
-		if (isOnSlope && moveX == 0 && canWalkOnSlope)
+		if (isOnSlope && moveX == 0 && canWalkOnSlope && isGrounded)
         {
 			rb.sharedMaterial = fullFriction;
         }
