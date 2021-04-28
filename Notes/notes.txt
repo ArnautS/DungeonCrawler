@@ -1,0 +1,35 @@
+brainstorm 2d metroidvania achtig
+
+example: https://chrislhall.itch.io/relic-and-pursuit
+assets:
+char:
+https://o-lobster.itch.io/platformmetroidvania-pixel-art-asset-pack (smol ninja)
+https://rvros.itch.io/animated-pixel-hero (knight)
+area:
+https://adamatomic.itch.io/cavernas
+enemies:
+https://admurin.itch.io/enemy-galore
+https://luizmelo.itch.io/monsters-creatures-fantasy
+cave:
+https://szadiart.itch.io/pixel-fantasy-caves
+
+features:
+char movement:
+	- basic movement
+	- double jump
+	- attack
+powerups:
+	- glide
+	- crouch / slide
+	
+obstacles:
+	- spikes
+	- lasers
+	- water / lava
+	
+enemies:
+	- bat
+	- slime
+	
+programming notes:
+	- radius ground check net iets minder dan width char / collider
