@@ -65,7 +65,7 @@ public class PlayerMovement : MonoBehaviour
 		//Debug print
 		UIManager.UpdateDebugText($"grounded: {isGrounded.ToString()}", 0);
 		UIManager.UpdateDebugText($"canWalkOnSlope: {canWalkOnSlope.ToString()}", 1);
-		UIManager.UpdateDebugText($"is jumping: {isJumping.ToString()}", 2);
+		UIManager.UpdateDebugText($"isOnSlope: {isOnSlope.ToString()}", 2);
 
 		moveX = Input.GetAxisRaw("Horizontal");
 
@@ -78,6 +78,7 @@ public class PlayerMovement : MonoBehaviour
 
 		animator.SetBool("IsJumping", isJumping);
 		animator.SetBool("IsGrounded", isGrounded);
+		animator.SetBool("IsOnSlope", isOnSlope);
 	}
 
     void FixedUpdate()
@@ -147,7 +148,7 @@ public class PlayerMovement : MonoBehaviour
 			isJumping = false;
 		}
 
-		if (isGrounded && !isJumping)
+		if (isGrounded && !isJumping) // && canWalkOnSlope)
 		{
 			canJump = true;
 		}
