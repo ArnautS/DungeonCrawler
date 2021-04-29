@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private float maxSlopeAngle;
 
 	[SerializeField] private PhysicsMaterial2D noFriction;
-	[SerializeField] private PhysicsMaterial2D fullFriction;
+	[SerializeField] private PhysicsMaterial2D fullFriction;	
 
 	// private variables
 	private float moveX;
@@ -38,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
 	private Vector2 slopeNormalPerp;
 	private Vector2 slopeSideNormalPerp;
 
+	private InputMaster controls;
 
 	// components
 	private Rigidbody2D rb;
@@ -45,10 +47,15 @@ public class PlayerMovement : MonoBehaviour
 	private CapsuleCollider2D cc;
 	private Animator animator;
 
-	// Start is called before the first frame update
-	void Start()
+    private void Awake()
     {
-        rb = gameObject.GetComponent<Rigidbody2D>();
+		controls = new InputMaster();
+	}
+
+    // Start is called before the first frame update
+    void Start()
+    {		
+		rb = gameObject.GetComponent<Rigidbody2D>();
         sr = gameObject.GetComponent<SpriteRenderer>();
 		cc = gameObject.GetComponent<CapsuleCollider2D>();
 		animator = gameObject.GetComponent<Animator>();
@@ -59,6 +66,16 @@ public class PlayerMovement : MonoBehaviour
 		velocity = rb.velocity;
     }
 
+    private void OnEnable()
+    {
+		controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+		controls.Disable();
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -67,15 +84,7 @@ public class PlayerMovement : MonoBehaviour
 		UIManager.UpdateDebugText($"canWalkOnSlope: {canWalkOnSlope.ToString()}", 1);
 		UIManager.UpdateDebugText($"isOnSlope: {isOnSlope.ToString()}", 2);
 
-		moveX = Input.GetAxisRaw("Horizontal");
-
 		animator.SetFloat("Speed", Mathf.Abs(moveX));
-
-		if (Input.GetButtonDown("Jump"))
-		{
-			Jump(playerJumpPower);
-		}
-
 		animator.SetBool("IsJumping", isJumping);
 		animator.SetBool("IsGrounded", isGrounded);
 		animator.SetBool("IsOnSlope", isOnSlope);
@@ -106,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 		{
 			velocity.Set(moveX * playerSpeed * Time.fixedDeltaTime, 0.0f);
 			rb.velocity = velocity;
-			Debug.Log($"Applying normal speed, x={rb.velocity.x}, y={rb.velocity.y}, total={rb.velocity.magnitude}, time={Time.fixedDeltaTime}");
+			//Debug.Log($"Applying normal speed, x={rb.velocity.x}, y={rb.velocity.y}, total={rb.velocity.magnitude}, time={Time.fixedDeltaTime}");
 		}
 		else if (isGrounded && isOnSlope && !isJumping && canWalkOnSlope)
 		{
@@ -121,13 +130,13 @@ public class PlayerMovement : MonoBehaviour
 			}
 
 			rb.velocity = velocity;
-			Debug.Log($"Applying slope speed, x={rb.velocity.x}, y={rb.velocity.y}, total={rb.velocity.magnitude}, time={Time.fixedDeltaTime}");
+			//Debug.Log($"Applying slope speed, x={rb.velocity.x}, y={rb.velocity.y}, total={rb.velocity.magnitude}, time={Time.fixedDeltaTime}");
 		}
 		else if (!isGrounded)
 		{
 			velocity.Set(moveX * playerSpeed * Time.fixedDeltaTime, rb.velocity.y);
 			rb.velocity = velocity;
-			Debug.Log("Applying jumping speed");
+			//Debug.Log("Applying jumping speed");
 		}
 		else
         {
@@ -243,16 +252,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	void Jump(int power)
+	void OnJump()
 	{
 		if (canJump)
         {
 			canJump = false;
 			isJumping = true;
 			rb.velocity = Vector2.zero;
-			rb.AddForce(Vector2.up * power, ForceMode2D.Impulse);
-		}
-		
+			rb.AddForce(Vector2.up * playerJumpPower, ForceMode2D.Impulse);
+		}		
 	}
+
+	void OnMovement(InputValue value)
+    {
+		moveX = value.Get<float>();
+    }
 
 }
