@@ -1,0 +1,76 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EnemyMovement : MonoBehaviour {
+
+	[SerializeField] private int EnemySpeed = 1;
+	[SerializeField] private int XMoveDirection = 1;
+	[SerializeField] private LayerMask whatIsGround;
+	[SerializeField] private float knockbackPower = 2.0f;
+
+	private float collisionRange;
+
+	private bool isKnockedBack = false;
+	
+	private Rigidbody2D rb;
+	private CapsuleCollider2D cc;
+	private SpriteRenderer sr;
+	private PlayerMovement pm;
+	
+
+    // Start is called before the first frame update
+    void Start() 
+	{
+		rb = gameObject.GetComponent<Rigidbody2D>();
+		cc = gameObject.GetComponent<CapsuleCollider2D>();
+		sr = gameObject.GetComponent<SpriteRenderer>();
+		pm = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>();
+
+		collisionRange = cc.size.x / 2 + 0.001f;
+	}
+
+    // Update is called once per frame
+    void Update() 
+	{	
+		if (!isKnockedBack)
+        {
+			rb.velocity = new Vector2(XMoveDirection * EnemySpeed, rb.velocity.y);
+		}
+		else if (rb.velocity.x == 0)
+        {
+			isKnockedBack = false;
+        }
+
+		
+		RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x + XMoveDirection * collisionRange + cc.offset.x, transform.position.y + cc.offset.y), new Vector2(XMoveDirection, 0), 0.02f, whatIsGround);
+		Debug.DrawRay(transform.position, hit.normal, Color.red);
+		
+
+		if (hit)
+		{
+			Debug.Log(hit.transform.name);
+			XMoveDirection = -XMoveDirection;
+			sr.flipX = !sr.flipX;
+			cc.offset = new Vector2(-cc.offset.x, cc.offset.y);
+        }
+    }
+
+	public void Knockback()
+    {
+		rb.velocity = Vector2.zero;
+		rb.AddForce(new Vector2(pm.PlayerDirection() * knockbackPower, -rb.velocity.y), ForceMode2D.Impulse); ;
+		isKnockedBack = true;
+    }
+
+	private void OnDrawGizmosSelected()
+	{
+		if (cc == null) return;
+
+		Gizmos.DrawRay(new Vector2(transform.position.x + XMoveDirection * collisionRange + cc.offset.x, transform.position.y + cc.offset.y), new Vector2(XMoveDirection, 0));
+	}
+
+
+
+
+}

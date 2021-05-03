@@ -32,6 +32,7 @@ public class PlayerMovement : MonoBehaviour
 	private bool canJump;
 	private bool isOnSlope;
 	private bool canWalkOnSlope;
+	private bool oldFlipX;
 
 	private Vector2 velocity;
 	private Vector2 colliderSize;
@@ -46,24 +47,26 @@ public class PlayerMovement : MonoBehaviour
 	private SpriteRenderer sr;
 	private CapsuleCollider2D cc;
 	private Animator animator;
+	private PlayerCombat combat;
 
     private void Awake()
     {
 		controls = new InputMaster();
 	}
-
-    // Start is called before the first frame update
+	
     void Start()
     {		
 		rb = gameObject.GetComponent<Rigidbody2D>();
         sr = gameObject.GetComponent<SpriteRenderer>();
 		cc = gameObject.GetComponent<CapsuleCollider2D>();
 		animator = gameObject.GetComponent<Animator>();
+		combat = gameObject.GetComponent<PlayerCombat>();
 
 		colliderSize = cc.size;
 		colliderOffset = cc.offset;
 
 		velocity = rb.velocity;
+		oldFlipX = sr.flipX;
     }
 
     private void OnEnable()
@@ -76,13 +79,30 @@ public class PlayerMovement : MonoBehaviour
 		controls.Disable();
     }
 
-    // Update is called once per frame
-    private void Update()
+	// Player controls
+	void OnJump()
+	{
+		if (canJump)
+		{
+			canJump = false;
+			isJumping = true;
+			rb.velocity = Vector2.zero;
+			rb.AddForce(Vector2.up * playerJumpPower, ForceMode2D.Impulse);
+		}
+	}
+
+	void OnMovement(InputValue value)
+	{
+		moveX = value.Get<float>();
+	}
+
+
+	private void Update()
     {
 		//Debug print
-		UIManager.UpdateDebugText($"grounded: {isGrounded.ToString()}", 0);
-		UIManager.UpdateDebugText($"canWalkOnSlope: {canWalkOnSlope.ToString()}", 1);
-		UIManager.UpdateDebugText($"isOnSlope: {isOnSlope.ToString()}", 2);
+		UIManager.UpdateDebugText($"grounded: {isGrounded}", 0);
+		UIManager.UpdateDebugText($"canWalkOnSlope: {canWalkOnSlope}", 1);
+		UIManager.UpdateDebugText($"isOnSlope: {isOnSlope}", 2);
 
 		animator.SetFloat("Speed", Mathf.Abs(moveX));
 		animator.SetBool("IsJumping", isJumping);
@@ -109,6 +129,13 @@ public class PlayerMovement : MonoBehaviour
 		{
 			sr.flipX = false;
 		}
+
+		if (oldFlipX != sr.flipX)
+        {
+			combat.FlipAttackpoint();
+        }
+
+		oldFlipX = sr.flipX;
 
 		//set player velocity		
 		if (isGrounded && !isOnSlope && !isJumping)
@@ -140,7 +167,7 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else
         {
-			Debug.Log("Can't apply normal movement");
+			//Debug.Log("Can't apply normal movement");
         }
 
 		animator.SetFloat("VelocityY", rb.velocity.y);
@@ -242,7 +269,8 @@ public class PlayerMovement : MonoBehaviour
 			canWalkOnSlope = true;
         }
 
-		if (isOnSlope && moveX == 0 && canWalkOnSlope && isGrounded)
+		// Set material friction to prevent sliding of a slope
+		if (isOnSlope && moveX == 0  && isGrounded)
         {
 			rb.sharedMaterial = fullFriction;
         }
@@ -252,20 +280,20 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	void OnJump()
-	{
-		if (canJump)
-        {
-			canJump = false;
-			isJumping = true;
-			rb.velocity = Vector2.zero;
-			rb.AddForce(Vector2.up * playerJumpPower, ForceMode2D.Impulse);
-		}		
-	}
-
-	void OnMovement(InputValue value)
+	public int PlayerDirection()
     {
-		moveX = value.Get<float>();
+		if (sr.flipX)
+        {
+			return -1;
+        }
+        else
+        {
+			return 1;
+        }
     }
+
+	
+
+	
 
 }

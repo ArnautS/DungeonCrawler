@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
 
     static UIManager current;
 
-    public TextMeshProUGUI debugText;
-
     private TextMeshProUGUI[] debugTexts;
+    private TextMeshProUGUI healthText;
 
     public int test = 0;
     
@@ -26,21 +26,19 @@ public class UIManager : MonoBehaviour
         current = this;
         DontDestroyOnLoad(gameObject);
 
-        current.debugTexts = current.GetComponentsInChildren<TextMeshProUGUI>();
+        current.debugTexts = current.GetComponentsInChildren<TextMeshProUGUI>().Where(x => x.CompareTag("Debug")).ToArray();
         foreach(var comp in current.debugTexts)
         {
-            comp.text = "";
+            comp.text = "test";
         }
+
+        healthText = current.GetComponentsInChildren<TextMeshProUGUI>().Where(x => x.name == "Health").First();
+
     }
 
 
     public static void UpdateDebugText(string text, int nr)
     {
-        if (current == null)
-        {
-            return;
-        }
-
         if (nr > current.debugTexts.Length)
         {
             Debug.Log("debug text is null");
@@ -49,4 +47,10 @@ public class UIManager : MonoBehaviour
 
         current.debugTexts[nr].text = text;
     }
+
+    public static void UpdateHealthText(int health)
+    {
+        current.healthText.text = "HP = " + health.ToString();
+    }
+
 }
