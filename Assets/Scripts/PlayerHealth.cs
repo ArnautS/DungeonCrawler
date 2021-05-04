@@ -8,12 +8,14 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] private int maxHealth = 100;
 	private int health;
 	private Animator animator;
+	private PlayerMovement movement;
 
 	private void Start()
     {
 		health = maxHealth;
 		UIManager.UpdateHealthText(health);
 		animator = gameObject.GetComponent<Animator>();
+		movement = gameObject.GetComponent<PlayerMovement>();
 	}
 
     // Update is called once per frame
@@ -25,30 +27,42 @@ public class PlayerHealth : MonoBehaviour
 
     }
 
-	void OnCollisionEnter2D(Collision2D collision)
-	{
+	void OnTriggerEnter2D(Collider2D collision)
+    {
+		Debug.Log($"{collision.gameObject.name} has collided with player");
 
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
-			TakeDamage(25);
-			UIManager.UpdateHealthText(health);
+			TakeDamage(25, collision);
+			
 		}
 
 
-		foreach (ContactPoint2D contact in collision.contacts)
-		{
-			Debug.DrawRay(contact.point, contact.normal, Color.white);
-		};
+		//foreach (ContactPoint2D contact in collision.contacts)
+		//{
+		//	Debug.DrawRay(contact.point, contact.normal, Color.white);
+		//};
 
 
 	}
 
-	public void TakeDamage(int damage)
+	public void TakeDamage(int damage, Collider2D collision)
 	{
 		health -= damage;
+		UIManager.UpdateHealthText(health);
 
 		// Play damage animation
 		animator.SetTrigger("Hit");
+
+		// Add knockback to player
+		Rigidbody2D enemy = collision.gameObject.GetComponent<Rigidbody2D>();
+		if (enemy != null)
+        {
+			movement.Knockback((transform.position - enemy.transform.position).normalized);
+		}
+			
+
+		// Add i-frames
 
 
 		if (health <= 0)

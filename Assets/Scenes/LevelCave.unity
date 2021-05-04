@@ -260,7 +260,7 @@ MonoBehaviour:
   XMoveDirection: 1
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 1792
+    m_Bits: 1536
   knockbackPower: 11
 --- !u!114 &67873123
 MonoBehaviour:
@@ -8093,6 +8093,7 @@ GameObject:
   - component: {fileID: 2003684200}
   - component: {fileID: 2003684197}
   - component: {fileID: 2003684199}
+  - component: {fileID: 2003684203}
   - component: {fileID: 2003684196}
   - component: {fileID: 2003684202}
   - component: {fileID: 2003684198}
@@ -8229,6 +8230,7 @@ MonoBehaviour:
     m_Bits: 512
   slopeCheckDistance: 0.5
   maxSlopeAngle: 60
+  knockbackPower: 10
   noFriction: {fileID: 6200000, guid: 34348b4f4cecfde4eaeefbd742ee466a, type: 2}
   fullFriction: {fileID: 6200000, guid: f4bbe1aa6ecfb754a821c9b590b45f53, type: 2}
 --- !u!70 &2003684199
@@ -8245,7 +8247,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.2}
-  m_Size: {x: 0.9, y: 1.7937655}
+  m_Size: {x: 0.01, y: 1.7937655}
   m_Direction: 0
 --- !u!95 &2003684200
 Animator:
@@ -8316,6 +8318,22 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 519420031}
+--- !u!70 &2003684203
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2003684193}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.2}
+  m_Size: {x: 0.9, y: 1.7937655}
+  m_Direction: 0
 --- !u!114 &2003684204
 MonoBehaviour:
   m_ObjectHideFlags: 0

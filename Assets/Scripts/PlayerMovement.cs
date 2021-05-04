@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-    // serializable variables
+	// serializable variables
 	[SerializeField] private int playerJumpPower;
 	[SerializeField] private int playerSpeed;
 
@@ -14,9 +14,10 @@ public class PlayerMovement : MonoBehaviour
 	[SerializeField] private LayerMask whatIsGround;
 	[SerializeField] private float slopeCheckDistance;
 	[SerializeField] private float maxSlopeAngle;
+	[SerializeField] private float knockbackPower;
 
 	[SerializeField] private PhysicsMaterial2D noFriction;
-	[SerializeField] private PhysicsMaterial2D fullFriction;	
+	[SerializeField] private PhysicsMaterial2D fullFriction;
 
 	// private variables
 	private float moveX;
@@ -26,13 +27,14 @@ public class PlayerMovement : MonoBehaviour
 	private float slopeSideAngle;
 
 	private int slopeDirection;
-	
+
 	private bool isGrounded;
 	private bool isJumping;
 	private bool canJump;
 	private bool isOnSlope;
 	private bool canWalkOnSlope;
 	private bool oldFlipX;
+	private bool isKnockedBack = false;
 
 	private Vector2 velocity;
 	private Vector2 colliderSize;
@@ -49,15 +51,15 @@ public class PlayerMovement : MonoBehaviour
 	private Animator animator;
 	private PlayerCombat combat;
 
-    private void Awake()
-    {
+	private void Awake()
+	{
 		controls = new InputMaster();
 	}
-	
-    void Start()
-    {		
+
+	void Start()
+	{
 		rb = gameObject.GetComponent<Rigidbody2D>();
-        sr = gameObject.GetComponent<SpriteRenderer>();
+		sr = gameObject.GetComponent<SpriteRenderer>();
 		cc = gameObject.GetComponent<CapsuleCollider2D>();
 		animator = gameObject.GetComponent<Animator>();
 		combat = gameObject.GetComponent<PlayerCombat>();
@@ -67,22 +69,22 @@ public class PlayerMovement : MonoBehaviour
 
 		velocity = rb.velocity;
 		oldFlipX = sr.flipX;
-    }
+	}
 
-    private void OnEnable()
-    {
+	private void OnEnable()
+	{
 		controls.Enable();
-    }
+	}
 
-    private void OnDisable()
-    {
+	private void OnDisable()
+	{
 		controls.Disable();
-    }
+	}
 
 	// Player controls
 	void OnJump()
 	{
-		if (canJump)
+		if (canJump && !isKnockedBack)
 		{
 			canJump = false;
 			isJumping = true;
@@ -98,7 +100,7 @@ public class PlayerMovement : MonoBehaviour
 
 
 	private void Update()
-    {
+	{
 		//Debug print
 		UIManager.UpdateDebugText($"grounded: {isGrounded}", 0);
 		UIManager.UpdateDebugText($"canWalkOnSlope: {canWalkOnSlope}", 1);
@@ -110,12 +112,12 @@ public class PlayerMovement : MonoBehaviour
 		animator.SetBool("IsOnSlope", isOnSlope);
 	}
 
-    void FixedUpdate()
-    {
+	void FixedUpdate()
+	{
 		CheckGround();
 		CheckSlope();
 		PlayerMove();
-    }
+	}
 
 	void PlayerMove()
 	{
@@ -131,14 +133,18 @@ public class PlayerMovement : MonoBehaviour
 		}
 
 		if (oldFlipX != sr.flipX)
-        {
+		{
 			combat.FlipAttackpoint();
-        }
+		}
 
 		oldFlipX = sr.flipX;
 
 		//set player velocity		
-		if (isGrounded && !isOnSlope && !isJumping)
+		if (isKnockedBack)
+        {
+
+        }
+		else if (isGrounded && !isOnSlope && !isJumping)
 		{
 			velocity.Set(moveX * playerSpeed * Time.fixedDeltaTime, 0.0f);
 			rb.velocity = velocity;
@@ -146,13 +152,13 @@ public class PlayerMovement : MonoBehaviour
 		}
 		else if (isGrounded && isOnSlope && !isJumping && canWalkOnSlope)
 		{
-			
-			if ( moveX == slopeDirection && slopeNormalPerp == Vector2.left ) 
+
+			if (moveX == slopeDirection && slopeNormalPerp == Vector2.left)
 			{
 				velocity.Set(-moveX * playerSpeed * slopeSideNormalPerp.x * Time.fixedDeltaTime, -moveX * playerSpeed * slopeSideNormalPerp.y * Time.fixedDeltaTime);
 			}
 			else
-            {
+			{
 				velocity.Set(-moveX * playerSpeed * slopeNormalPerp.x * Time.fixedDeltaTime, -moveX * playerSpeed * slopeNormalPerp.y * Time.fixedDeltaTime);
 			}
 
@@ -166,12 +172,29 @@ public class PlayerMovement : MonoBehaviour
 			//Debug.Log("Applying jumping speed");
 		}
 		else
-        {
+		{
 			//Debug.Log("Can't apply normal movement");
-        }
+		}
 
 		animator.SetFloat("VelocityY", rb.velocity.y);
-		
+
+	}
+
+	public void Knockback(Vector2 direction)
+    {
+		rb.velocity = Vector2.zero;
+		rb.AddForce(direction * knockbackPower, ForceMode2D.Impulse);
+		rb.sharedMaterial = noFriction;
+		rb.gravityScale = 0;
+		isKnockedBack = true;
+
+	}
+
+	private void SetKnockbackFalse()
+    {
+		isKnockedBack = false;
+		rb.sharedMaterial = fullFriction;
+		rb.gravityScale = 7;
 	}
 
 	private void CheckGround()
@@ -270,7 +293,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
 		// Set material friction to prevent sliding of a slope
-		if (isOnSlope && moveX == 0  && isGrounded)
+		if (isOnSlope && moveX == 0  && isGrounded && !isKnockedBack)
         {
 			rb.sharedMaterial = fullFriction;
         }
