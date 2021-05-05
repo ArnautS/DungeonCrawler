@@ -187,6 +187,7 @@ public class PlayerMovement : MonoBehaviour
 		rb.sharedMaterial = noFriction;
 		rb.gravityScale = 0;
 		isKnockedBack = true;
+		animator.SetBool("IsKnockedBack", true);
 
 	}
 
@@ -195,6 +196,7 @@ public class PlayerMovement : MonoBehaviour
 		isKnockedBack = false;
 		rb.sharedMaterial = fullFriction;
 		rb.gravityScale = 7;
+		animator.SetBool("IsKnockedBack", false);
 	}
 
 	private void CheckGround()
