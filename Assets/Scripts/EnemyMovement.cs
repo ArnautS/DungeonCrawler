@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour {
 	[SerializeField] private int XMoveDirection = 1;
 	[SerializeField] private LayerMask whatIsGround;
 	[SerializeField] private float knockbackPower = 2.0f;
+	[SerializeField] private float detectionRange = 0.05f;
 
 	private float collisionRange;
 
@@ -43,7 +44,7 @@ public class EnemyMovement : MonoBehaviour {
         }
 
 		
-		RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x + XMoveDirection * collisionRange + cc.offset.x, transform.position.y + cc.offset.y), new Vector2(XMoveDirection, 0), 0.02f, whatIsGround);
+		RaycastHit2D hit = Physics2D.Raycast(new Vector2(transform.position.x + XMoveDirection * collisionRange + cc.offset.x, transform.position.y + cc.offset.y), new Vector2(XMoveDirection, 0), detectionRange, whatIsGround);
 		Debug.DrawRay(transform.position, hit.normal, Color.red);
 		
 

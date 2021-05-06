@@ -1,19 +1,19 @@
 fileFormatVersion: 2
-guid: eb9704a409f8d0c4fab4151bdbf8f1cc
+guid: b901ba8b51025f34aa3ea1c044c99b95
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1165160126693205279
-    second: Slime_Spiked_Ability_0
+      213: -6834524911116659543
+    second: chest_0
   - first:
-      213: 3650526319238169895
-    second: Slime_Spiked_Ability_1
+      213: 5045073161074915229
+    second: chest_1
   - first:
-      213: -5917415401689620539
-    second: Slime_Spiked_Ability_2
+      213: -1089752354001653685
+    second: chest_2
   - first:
-      213: 6876234687206134046
-    second: Slime_Spiked_Ability_3
+      213: -4166000864571609707
+    second: chest_3
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -99,85 +99,85 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Slime_Spiked_Ability_0
+      name: chest_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
+        width: 16
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1ea900eb90584dfe0800000000000000
-      internalID: -1165160126693205279
+      spriteID: 9a45550edc3e621a0800000000000000
+      internalID: -6834524911116659543
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Spiked_Ability_1
+      name: chest_1
       rect:
         serializedVersion: 2
-        x: 64
+        x: 16
         y: 0
-        width: 64
-        height: 64
+        width: 16
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 725c765985649a230800000000000000
-      internalID: 3650526319238169895
+      spriteID: d973abf5f43b30640800000000000000
+      internalID: 5045073161074915229
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Spiked_Ability_2
+      name: chest_2
       rect:
         serializedVersion: 2
-        x: 128
+        x: 32
         y: 0
-        width: 64
-        height: 64
+        width: 16
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5cf5dd14b0e11eda0800000000000000
-      internalID: -5917415401689620539
+      spriteID: b40f59ef10c60e0f0800000000000000
+      internalID: -1089752354001653685
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Slime_Spiked_Ability_3
+      name: chest_3
       rect:
         serializedVersion: 2
-        x: 192
+        x: 48
         y: 0
-        width: 64
-        height: 64
+        width: 16
+        height: 19
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e111423240b4d6f50800000000000000
-      internalID: 6876234687206134046
+      spriteID: 59d2d3d39446f26c0800000000000000
+      internalID: -4166000864571609707
       vertices: []
       indices: 
       edges: []

@@ -39,20 +39,13 @@ public class PlayerHealth : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D collision)
     {
-		Debug.Log($"{collision.gameObject.name} has collided with player");
+		//Debug.Log($"{collision.gameObject.name} has collided with player");
 
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
 			TakeDamage(25, collision);
 			
 		}
-
-
-		//foreach (ContactPoint2D contact in collision.contacts)
-		//{
-		//	Debug.DrawRay(contact.point, contact.normal, Color.white);
-		//};
-
 
 	}
 

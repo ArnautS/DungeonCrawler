@@ -8,13 +8,14 @@ public class PlayerMovement : MonoBehaviour
 	// serializable variables
 	[SerializeField] private int playerJumpPower;
 	[SerializeField] private int playerSpeed;
+	[SerializeField] private float knockbackPower;
 
 	[SerializeField] private Transform groundCheck;
 	[SerializeField] private float groundCheckRadius;
 	[SerializeField] private LayerMask whatIsGround;
+	[SerializeField] private LayerMask interactables;
 	[SerializeField] private float slopeCheckDistance;
 	[SerializeField] private float maxSlopeAngle;
-	[SerializeField] private float knockbackPower;
 
 	[SerializeField] private PhysicsMaterial2D noFriction;
 	[SerializeField] private PhysicsMaterial2D fullFriction;
@@ -27,6 +28,8 @@ public class PlayerMovement : MonoBehaviour
 	private float slopeSideAngle;
 
 	private int slopeDirection;
+	private int timesJumped = 0;
+	private int maxJumps = 1;
 
 	private bool isGrounded;
 	private bool isJumping;
@@ -43,6 +46,7 @@ public class PlayerMovement : MonoBehaviour
 	private Vector2 slopeSideNormalPerp;
 
 	private InputMaster controls;
+	
 
 	// components
 	private Rigidbody2D rb;
@@ -63,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
 		cc = gameObject.GetComponent<CapsuleCollider2D>();
 		animator = gameObject.GetComponent<Animator>();
 		combat = gameObject.GetComponent<PlayerCombat>();
+
 
 		colliderSize = cc.size;
 		colliderOffset = cc.offset;
@@ -86,7 +91,11 @@ public class PlayerMovement : MonoBehaviour
 	{
 		if (canJump && !isKnockedBack)
 		{
-			canJump = false;
+			timesJumped++;
+			if (timesJumped >= maxJumps)
+            {
+				canJump = false;
+			}
 			isJumping = true;
 			rb.velocity = Vector2.zero;
 			rb.AddForce(Vector2.up * playerJumpPower, ForceMode2D.Impulse);
@@ -212,6 +221,7 @@ public class PlayerMovement : MonoBehaviour
 		if (isGrounded && !isJumping) // && canWalkOnSlope)
 		{
 			canJump = true;
+			timesJumped = 0;
 		}
 
 		// falling mechanics
@@ -317,7 +327,11 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	
+
+	public void ActivateDoubleJump()
+    {
+		maxJumps = 2;
+    }
 
 	
 
