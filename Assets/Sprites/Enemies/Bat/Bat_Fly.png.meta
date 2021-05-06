@@ -102,10 +102,10 @@ TextureImporter:
       name: Bat_Fly_0
       rect:
         serializedVersion: 2
-        x: 23
-        y: 26
-        width: 17
-        height: 11
+        x: 0
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -123,10 +123,10 @@ TextureImporter:
       name: Bat_Fly_1
       rect:
         serializedVersion: 2
-        x: 87
-        y: 25
-        width: 17
-        height: 15
+        x: 64
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -144,10 +144,10 @@ TextureImporter:
       name: Bat_Fly_2
       rect:
         serializedVersion: 2
-        x: 151
-        y: 23
-        width: 17
-        height: 11
+        x: 128
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -165,10 +165,10 @@ TextureImporter:
       name: Bat_Fly_3
       rect:
         serializedVersion: 2
-        x: 215
-        y: 21
-        width: 17
-        height: 14
+        x: 192
+        y: 0
+        width: 64
+        height: 64
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
