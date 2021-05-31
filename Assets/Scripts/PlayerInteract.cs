@@ -37,7 +37,6 @@ public class PlayerInteract : MonoBehaviour
         {
             arrayCounter--;
             interactables[arrayCounter] = null;
-            Debug.Log("removed collider");
         }
     }
 }

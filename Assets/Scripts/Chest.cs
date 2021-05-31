@@ -34,7 +34,7 @@ public class Chest : MonoBehaviour, IInteractable
         switch (powerup)
         {
             case Powerup.DoubleJump:
-                movement.ActivateDoubleJump();
+                GameManager.instance.ActivateDoubleJump();
                 Debug.Log("activated double jump");
                 break;
             default:

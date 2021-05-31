@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraSystem : MonoBehaviour
 {
-	private GameObject player;
+	public GameObject Player { get; set; }
 	[SerializeField]
 	private float xMin;
 	[SerializeField]
@@ -18,15 +18,18 @@ public class CameraSystem : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		player = GameObject.FindGameObjectWithTag("Player");
+		Player = GameObject.FindGameObjectWithTag("Player");
 	}
 
 	// Update is called once per frame
-	void LateUpdate()
+	void FixedUpdate()
 	{
 		// Camera controls, change to metroidvania tutorial if necessary. 
-		float x = Mathf.Clamp(player.transform.position.x, xMin, xMax);
-		float y = Mathf.Clamp(player.transform.position.y, yMin, yMax);
+		float x = Mathf.Clamp(Player.transform.position.x, xMin, xMax);
+		float y = Mathf.Clamp(Player.transform.position.y, yMin, yMax);
 		gameObject.transform.position = new Vector3(x, y, gameObject.transform.position.z);
 	}
+
+
+
 }

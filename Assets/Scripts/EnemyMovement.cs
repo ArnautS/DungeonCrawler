@@ -13,6 +13,7 @@ public class EnemyMovement : MonoBehaviour {
 	private float collisionRange;
 
 	private bool isKnockedBack = false;
+	private bool isColliding = false;
 	
 	private Rigidbody2D rb;
 	private CapsuleCollider2D cc;
@@ -60,16 +61,26 @@ public class EnemyMovement : MonoBehaviour {
 		sr.flipX = !sr.flipX;
 		cc.offset = new Vector2(-cc.offset.x, cc.offset.y);
 	}
-	
-	private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-			ReverseMovement();
-        }
-    }
 
-    public void Knockback()
+	private void OnCollisionEnter2D(Collision2D collision)
+	{
+		//if (isColliding) return;
+		isColliding = true;
+		if (collision.gameObject.CompareTag("Enemy"))
+		{
+			ReverseMovement();
+			Debug.Log("Reversing movement");
+		}
+		StartCoroutine(Reset());
+	}
+
+	
+	IEnumerator Reset()
+	{
+		yield return new WaitForEndOfFrame();
+		isColliding = false;
+	}
+	public void Knockback()
     {
 		rb.velocity = Vector2.zero;
 		rb.AddForce(new Vector2(pm.PlayerDirection() * knockbackPower, -rb.velocity.y), ForceMode2D.Impulse); ;

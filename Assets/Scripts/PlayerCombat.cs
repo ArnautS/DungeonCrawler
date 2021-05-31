@@ -28,13 +28,11 @@ public class PlayerCombat : MonoBehaviour
             nextAttackTime = Time.time + 1f / attackRate;
             
             // Play attack animation
-            animator.SetTrigger("Attack");
-
-            
-        }       
-        
+            animator.SetTrigger("Attack");            
+        } 
     }
 
+    // Animation event from attack animation
     void AttackHit()
     {
         // Detect enemies in range

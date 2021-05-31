@@ -29,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
 
 	private int slopeDirection;
 	private int timesJumped = 0;
-	private int maxJumps = 1;
 
 	private bool isGrounded;
 	private bool isJumping;
@@ -92,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
 		if (canJump && !isKnockedBack)
 		{
 			timesJumped++;
-			if (timesJumped >= maxJumps)
+			if (timesJumped >= GameManager.instance.MaxJumps)
             {
 				canJump = false;
 			}
@@ -328,10 +327,7 @@ public class PlayerMovement : MonoBehaviour
     }
 
 
-	public void ActivateDoubleJump()
-    {
-		maxJumps = 2;
-    }
+	
 
 	
 

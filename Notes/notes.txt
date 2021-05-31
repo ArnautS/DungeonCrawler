@@ -10,8 +10,12 @@ https://adamatomic.itch.io/cavernas
 enemies:
 https://admurin.itch.io/enemy-galore
 https://luizmelo.itch.io/monsters-creatures-fantasy
+https://hajileee.itch.io/hajileees-fantasy-characters-pack
 cave:
 https://szadiart.itch.io/pixel-fantasy-caves
+
+treasure chest:
+https://bakudas.itch.io/generic-dungeon-pack?download
 
 features:
 char movement:
@@ -33,3 +37,6 @@ enemies:
 	
 programming notes:
 	- radius ground check net iets minder dan width char / collider
+	
+	-0.1958588
+	1.785483
