@@ -9,6 +9,7 @@ TagManager:
   - UI
   - Ground
   - Interactable
+  - Hitbox
   layers:
   - Default
   - TransparentFX
