@@ -98,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
 			isJumping = true;
 			rb.velocity = Vector2.zero;
 			rb.AddForce(Vector2.up * playerJumpPower, ForceMode2D.Impulse);
+			animator.SetTrigger("Jump");
 		}
 	}
 
