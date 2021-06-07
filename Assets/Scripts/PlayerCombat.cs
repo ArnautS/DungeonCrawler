@@ -5,11 +5,12 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
 
-    [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRange = 0.5f;
     [SerializeField] private float attackRate = 2f;
     [SerializeField] private int attackPower = 10;
     [SerializeField] private LayerMask enemyLayers;
+
+    [SerializeField] PolygonCollider2D swordHitbox;
 
     private Animator animator;
     private float nextAttackTime = 0f;
@@ -36,7 +37,10 @@ public class PlayerCombat : MonoBehaviour
     void AttackHit()
     {
         // Detect enemies in range
-        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRange, enemyLayers);
+        List<Collider2D> hitEnemies = new List<Collider2D>();
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(enemyLayers);        
+        swordHitbox.OverlapCollider(filter, hitEnemies);
 
         // Apply damage
         foreach (Collider2D enemy in hitEnemies)
@@ -46,16 +50,9 @@ public class PlayerCombat : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmosSelected()
+    public void FlipSwordHitbox()
     {
-        if (attackPoint == null) return;
-
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-    }
-
-    public void FlipAttackpoint()
-    {
-        attackPoint.transform.localPosition = new Vector2(-attackPoint.transform.localPosition.x, attackPoint.transform.localPosition.y);
+        swordHitbox.transform.localScale = new Vector2(-swordHitbox.transform.localScale.x, swordHitbox.transform.localScale.y);
     }
 
 }

@@ -69,7 +69,6 @@ public class EnemyMovement : MonoBehaviour {
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
 			ReverseMovement();
-			Debug.Log("Reversing movement");
 		}
 		StartCoroutine(Reset());
 	}

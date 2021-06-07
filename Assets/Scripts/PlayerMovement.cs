@@ -142,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
 
 		if (oldFlipX != sr.flipX)
 		{
-			combat.FlipAttackpoint();
+			combat.FlipSwordHitbox();
 		}
 
 		oldFlipX = sr.flipX;

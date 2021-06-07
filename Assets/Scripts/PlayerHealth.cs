@@ -10,8 +10,9 @@ public class PlayerHealth : MonoBehaviour
 	[SerializeField] private Color regularColor;
 	[SerializeField] private float flashDuration;
 	[SerializeField] private int numberOfFlashes;
-	[SerializeField] private Collider2D triggerCollider;
+	[SerializeField] private Collider2D hitbox;
 	[SerializeField] private float deathDuration = 2;
+
 
 
 	private int health;
@@ -41,9 +42,9 @@ public class PlayerHealth : MonoBehaviour
 
 	void OnTriggerEnter2D(Collider2D collision)
     {
-		if (isColliding) return;
+		if (isColliding || !hitbox.IsTouching(collision)) return;
 		isColliding = true;
-		Debug.Log($"{collision.gameObject.name} has collided with player");
+		//Debug.Log($"{collision.gameObject.name} has collided with player");
 
 		if (collision.gameObject.CompareTag("Enemy"))
 		{
@@ -62,7 +63,7 @@ public class PlayerHealth : MonoBehaviour
 	{
 		health -= damage;
 		UIManager.UpdateHealthText(health);
-		triggerCollider.enabled = false;
+		hitbox.enabled = false;
 
 		// Play damage animation
 		animator.SetTrigger("Hit");
@@ -96,7 +97,7 @@ public class PlayerHealth : MonoBehaviour
 			yield return new WaitForSeconds(flashDuration);
 			counter++;
         }
-		triggerCollider.enabled = true;
+		hitbox.enabled = true;
     }
 
 	private void Die() {
